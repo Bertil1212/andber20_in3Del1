@@ -1,8 +1,5 @@
 import java.util.Iterator;
 
-import javax.lang.model.util.ElementScanner14;
-import javax.swing.UIDefaults.ProxyLazyValue;
-import javax.xml.transform.Templates;
 
 public class DataBuffer<T> implements Iterable<T> {
 
