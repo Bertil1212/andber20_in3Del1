@@ -65,14 +65,16 @@ public class DataBuffer<T> implements Iterable<T> {
         bufferSize = newBufferSize;
     }
 
-    public void printbuffer(){ //Print not working 
+    public void printbuffer(){ 
         String temp = "[";
-        for(int i= 0; i < size; i++){
-            if(i+front > size-1)
-            temp = temp + buffer[i];
-            if(i != back)
-                temp = temp + ", ";
+        for(int i= front; i < front+size; i++){
+            if(i > size-1)
+                temp = temp + buffer[i-size];
+            else
+                temp = temp + buffer[i];
+            temp = temp + ", ";
         }
+        temp = temp.substring(0, temp.length()-2);
         temp = temp + "]";
         System.out.println(temp);
     }
@@ -101,7 +103,7 @@ public class DataBuffer<T> implements Iterable<T> {
             public T next(){
                 
                 int temp = front+index;
-                if(temp > size)
+                if(temp > size-1)
                     temp = temp - (size);
                 
                 index++; 
@@ -126,27 +128,6 @@ public class DataBuffer<T> implements Iterable<T> {
         db.enqueue(7);
         db.enqueue(8);
         db.enqueue(9);
-        db.enqueue(10);
-        System.out.println(db.front + " " + db.back);
-        db.printbuffer();
-        db.dequeue();
-        db.dequeue();
-        db.dequeue();
-        System.out.println(db.front + " " + db.back);
-        db.printbuffer();
-        db.enqueue(2);
-        db.enqueue(2);
-        db.enqueue(3);
-        System.out.println(db.front + " " + db.back);
-
-        db.printbuffer();
-
-       /* Iterator it = db.iterator();
-        while(true){
-            if(it.hasNext() == false)
-                break;
-            
-            System.out.println(it.next());
-        }*/
+        db.enqueue(10); 
     }
 }
