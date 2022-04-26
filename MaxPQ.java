@@ -68,6 +68,17 @@ implements Iterable<T>
         size = 0;
     }
 
+    public MaxPQ(T[] a){
+        this(a.length+1);
+        int n = a.length+1;
+        for(int i = 0; i < a.length; i++){
+            this.a[i+1] = a[i];
+        }
+    }
+
+
+
+
     int size()
     {
         return size;
