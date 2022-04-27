@@ -1,23 +1,23 @@
 import java.util.*;
 
 
-public class MaxPQ<T extends Comparable<T>> 
-implements Iterable<T>
+public class MaxPQ<Key extends Comparable<Key>> 
+implements Iterable<Key>
 {
-    T[] a;
+    Key[] a;
     int size;
     
     
     
-    public Iterable<T> sortedOrder()
+    public Iterable<Key> sortedOrder()
     {
-        return new Iterable<T>()
+        return new Iterable<Key>()
         {
-            public Iterator<T> iterator()
+            public Iterator<Key> iterator()
             {
-                return new Iterator<T>()
+                return new Iterator<Key>()
                 {
-                    MaxPQ<T> mpqTemp;
+                    MaxPQ<Key> mpqTemp;
                     
                     {
                      for (int i = 1; i <= size; i++)
@@ -29,7 +29,7 @@ implements Iterable<T>
                         return !mpqTemp.isEmpty();
                     }
                     
-                    public T next()
+                    public Key next()
                     {
                         return mpqTemp.delMax();
                     }
@@ -38,16 +38,16 @@ implements Iterable<T>
         };
     }
     
-    public Iterator<T> iterator()
+    public Iterator<Key> iterator()
     {
-        return new Iterator<T>()
+        return new Iterator<Key>()
         {
             int index = 1;
             public boolean hasNext()
             {
                 return index <= size;
             }
-            public T next()
+            public Key next()
             {
                 return a[index++];
             }
@@ -64,16 +64,21 @@ implements Iterable<T>
 
     public MaxPQ(int max)
     {
-        a = (T[]) new Comparable[max];
+        a = (Key[]) new Comparable[max];
         size = 0;
     }
 
-    public MaxPQ(T[] a){
-        this(a.length+1);
-        int n = a.length+1;
+    public MaxPQ(Key[] a){
+        this.a = (Key[]) new Comparable[a.length+1];
+        size = 0;
+        int n = a.length-1;
         for(int i = 0; i < a.length; i++){
             this.a[i+1] = a[i];
         }
+        for(int i = n/2; i > -1; i--){
+            sink(i);
+        }
+
     }
 
 
@@ -89,7 +94,7 @@ implements Iterable<T>
         return size == 0;
     }
     
-    public void insert(T t)
+    public void insert(Key t)
     {
         if (size >= a.length-1)
             a = Arrays.copyOf(a, 2*a.length);
@@ -100,20 +105,20 @@ implements Iterable<T>
         
     }
     
-    public T max()
+    public Key max()
     {
         if (isEmpty()) return null;
         
         return a[1];
     } 
     
-    public T delMax()
+    public Key delMax()
     {
         if (isEmpty()) return null;
         
         exch(1,size);
         
-        T temp = a[size];
+        Key temp = a[size];
         a[size--] = null;
         
         if (!isEmpty()) sink(1);
@@ -167,14 +172,14 @@ implements Iterable<T>
     }
     
     
-    private boolean less(T v, T w)
+    private boolean less(Key v, Key w)
     {
         return v.compareTo(w) < 0;
     }
     
     private void exch(int i, int j)
     {
-        T temp = a[i]; a[i] = a[j]; a[j] = temp;
+        Key temp = a[i]; a[i] = a[j]; a[j] = temp;
     }
    
     public static void main(String[] cmdLn)
@@ -188,21 +193,23 @@ implements Iterable<T>
             
         System.out.println(Arrays.toString(a));
         
-        MaxPQ<Integer> mpq = new MaxPQ<Integer>();
+        MaxPQ<Integer> mpq = new MaxPQ<>(a);
+        
+        /*
         for (int i = 0; i < n; i++)
             mpq.insert(a[i]);
-            
+          */  
         //for (int i = 0; i < n; i++)
         //    System.out.println(mpq.delMax());
         
-        
+        /*
         for (Integer i : mpq.sortedOrder())
             System.out.println(i);
-            
-        /*    
+          */  
+          
         for (Integer i : mpq)
             System.out.println(i);
-        */
+        
             
             
         
