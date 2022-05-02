@@ -16,7 +16,7 @@ public class DataBuffer<T> implements Iterable<T> {
     }
     
 
-    public void enqueue(T t){
+    public synchronized void enqueue(T t){
         if(size == bufferSize)
             System.out.println("Buffer Full");
         else{
@@ -28,7 +28,7 @@ public class DataBuffer<T> implements Iterable<T> {
         }
     }
 
-    public T dequeue(){
+    public synchronized T dequeue(){
         T temp = null;
         if(size != 0){
             size--;
@@ -43,7 +43,7 @@ public class DataBuffer<T> implements Iterable<T> {
 
     }
 
-    public void changeBufferSize(int newBufferSize){
+    public synchronized void changeBufferSize(int newBufferSize){
         T[] temp = (T[]) new Object[newBufferSize];
         int steps;
         int count = 0;

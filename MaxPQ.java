@@ -69,13 +69,16 @@ implements Iterable<Key>
     }
 
     public MaxPQ(Key[] a){
+        //size = a.length;
         this.a = (Key[]) new Comparable[a.length+1];
-        size = 0;
-        int n = a.length-1;
+        int n = a.length;
         for(int i = 0; i < a.length; i++){
             this.a[i+1] = a[i];
+            size++;
         }
-        for(int i = n/2; i > -1; i--){
+        //System.out.println(size);
+        for(int i = n/2; i > 0; i--){
+            //System.out.println(i);
             sink(i);
         }
 
@@ -198,17 +201,16 @@ implements Iterable<Key>
         /*
         for (int i = 0; i < n; i++)
             mpq.insert(a[i]);
-          */  
+          */
         //for (int i = 0; i < n; i++)
         //    System.out.println(mpq.delMax());
         
-        /*
+        /* 
         for (Integer i : mpq.sortedOrder())
             System.out.println(i);
           */  
-          
-        for (Integer i : mpq)
-            System.out.println(i);
+        System.out.println(Arrays.toString(mpq.a));
+        
         
             
             

@@ -1,0 +1,5 @@
+Start
+
+Time: 2022/04/29 15:28:22. North America analyzer picks: TSLA. Confidence: 91. Direction: long. Volume: 28.
+Time: 2022/04/29 15:28:22. North America analyzer picks: MFST. Confidence: 91. Direction: short. Volume: 88.
+Time: 2022/04/29 15:28:22. Cryptocurrencices analyzer picks: ETH. Confidence: 75. Direction: long. Volume: 64.Loop
