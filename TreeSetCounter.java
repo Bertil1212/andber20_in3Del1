@@ -1,4 +1,8 @@
+
+import java.nio.file.Path;
 import java.util.Iterator;
+
+import javax.lang.model.type.NullType;
 
 public class TreeSetCounter<T extends Comparable<T>> implements Iterable<T>{
     int size;
@@ -56,32 +60,169 @@ public class TreeSetCounter<T extends Comparable<T>> implements Iterable<T>{
         return 5;
     }
 
+    
+
 
 
     public Iterator<T> iterator(){
         return new Iterator<T>() {
-            node<T> nodebefore;
             node<T> currentNode = topnode;
+            String curpath = "start";
+            int count = 0;
+            boolean isepmty = false;
             
+            //1 = right    0 = left 
+            //To get to a node follow a string as such 1000110
+            //Every node gets a value dependent on the path string. 1 being equal to 1, 0 being equal to -1.
+            //The most significant digit has a weight of 1 the second one a weight of 0.5  then 0.25 and so on.
+            //Multiply every 1 by its weight and for every 0 multyply -1 by its weight. Then sum up all the resulting values
+            //The higher the path value is, the higher the value of t in the corresponding node 
             
 
             public boolean hasNext(){
-                return currentNode != null;
+                if(topnode == null)
+                    return false;
 
+                return !isepmty;
             }
 
             public T next(){
-                
-                
+                if(curpath == "start"){
+                    System.out.print("yay");
+                    curpath = "";
+                    if(topnode == null){
+                        return null;
+                    }                                                
+                    while(currentNode.rightchild != null){
+                        currentNode = currentNode.rightchild;
+                        curpath = curpath + "1";
+                    }   
+                    count = currentNode.count;
+                    
+                        
+                }else{
+                    //dont update path if items left
+                    if(count == 0){
+                        //Update path
+                        if(currentNode.leftchild != null){
+                            curpath = curpath + "0";
+    
+                            currentNode = topnode;
+                            for(int i = 0; i < curpath.length(); i++){
+                                if(curpath.charAt(i) == '1')
+                                    currentNode = currentNode.rightchild;
+                                else if(curpath.charAt(i) == '0')
+                                    currentNode = currentNode.leftchild;
+                            }
+    
+                            while(currentNode.rightchild != null){
+                                curpath = curpath + "1";
+                                currentNode = currentNode.rightchild;
+                            }
+                        } else if(curpath.length() > 0 && curpath.charAt(curpath.length()-1) == '1'){
+                            curpath = curpath.substring(0, curpath.length()-1);
+                        }else{
+                            if(!curpath.contains("1") && currentNode.leftchild == null)
+                                isepmty = true;
+                            
 
+                            while(curpath.length() > 0 && curpath.charAt(curpath.length()-1) == '0'){
+                                curpath = curpath.substring(0, curpath.length()-1);
+                            }
+
+                            
+                            
+                            if(curpath.length() == 0){
+                                
+                                return null;
+                            }
+                            curpath = curpath.substring(0, curpath.length()-1);
+    
+                        }
+                    }else{
+                        count --;
+                        return currentNode.value;
+                    }
+                    
+                }
+                    
+                    
+
+
+
+
+
+                //follow new path
+                if(!isepmty){
+
+                    System.out.print(curpath);
+                    currentNode = topnode;
+                    
+                    for(int i = 0; i < curpath.length(); i++){
+                        if(curpath.charAt(i) == '1')
+                        currentNode = currentNode.rightchild;
+                        
+                        else if(curpath.charAt(i) == '0')
+                        currentNode = currentNode.leftchild;
+                    }
+                    
+                    
+                    count = currentNode.count - 1;
+                    return currentNode.value;
+                }else{
+                    currentNode = null;
+                    return null;
+                }
             }
         };
     }
 
     public static void main(String[] args) {
         TreeSetCounter<Integer> tree = new TreeSetCounter<>();
+        tree.add(10);
         tree.add(5);
+        tree.add(15);
+        tree.add(7);
+        tree.add(3);
+        tree.add(1);
+        tree.add(4);
+        tree.add(6);
+        tree.add(8);
+        tree.add(12);
+        tree.add(18);
+        tree.add(11);
+        tree.add(13);
+        tree.add(17);
+        tree.add(20);
+
+
         node<Integer> nod = new node<Integer>(6);
+        Iterator<Integer> it = tree.iterator();
+
+        while(true){
+            System.out.println("  "+it.next()+"  ");
+        }
+        
+           /* System.out.println("   "+ it.next() + "    ");
+            System.out.println("   "+ it.next() + "    ");
+            System.out.println("   "+ it.next() + "    ");
+            System.out.println("   "+ it.next() + "    ");
+            System.out.println("   "+ it.next() + "    ");
+            System.out.println("   "+ it.next() + "    ");
+            System.out.println("   "+ it.next() + "    ");
+            System.out.println("   "+ it.next() + "    ");
+            System.out.println("   "+ it.next() + "    ");
+            System.out.println("   "+ it.next() + "    ");
+            System.out.println("   "+ it.next() + "    ");
+            System.out.println("   "+ it.next() + "    ");
+            System.out.println("   "+ it.next() + "    ");
+            System.out.println("   "+ it.next() + "    ");
+            System.out.println("   "+ it.next() + "    ");
+            System.out.println("   "+ it.next() + "    ");
+            System.out.println("   "+ it.next() + "    ");
+            System.out.println("   "+ it.next() + "    ");*/
+        
+
         
         
     }
