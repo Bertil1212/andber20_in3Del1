@@ -49,33 +49,30 @@ public class TreeSetCounter<T extends Comparable<T>> implements Iterable<T>{
 
     }
 
-
-    public void find(T t){
-        int layer = 1;
-        for(int i = 0; i < size; i++){
-            
-        }
+    public void clear(){
+        topnode = null;
+    }
+    public int getMaxFrequency(){
+        return 5;
     }
 
 
 
     public Iterator<T> iterator(){
         return new Iterator<T>() {
+            node<T> nodebefore;
             node<T> currentNode = topnode;
+            
+            
 
             public boolean hasNext(){
-                
-                if(currentNode != null){
-                    node<T> nodeToSend = currentNode;
-                    return true;
-                }
-                return false;
+                return currentNode != null;
 
             }
 
             public T next(){
                 
-                return null;
+                
 
             }
         };
