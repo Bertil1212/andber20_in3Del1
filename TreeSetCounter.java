@@ -1,12 +1,10 @@
 
-import java.nio.file.Path;
 import java.util.Iterator;
-
-import javax.lang.model.type.NullType;
 
 public class TreeSetCounter<T extends Comparable<T>> implements Iterable<T>{
     int size;
     node<T> topnode;
+    int maxcount = 0;
 
     public TreeSetCounter(){
         size = 0;
@@ -16,6 +14,7 @@ public class TreeSetCounter<T extends Comparable<T>> implements Iterable<T>{
     public void add(T t){
         if(size == 0){
             topnode = new node<T>(t);
+            maxcount = 1;
         }else{
             node<T> curnode = topnode;
             while(true){
@@ -41,6 +40,10 @@ public class TreeSetCounter<T extends Comparable<T>> implements Iterable<T>{
                 }else{
                     //same value as parent
                     curnode.addToCount();
+                    
+                    if(curnode.count > maxcount)
+                        maxcount = curnode.count;
+
                     break;
                 }
             }
@@ -57,10 +60,50 @@ public class TreeSetCounter<T extends Comparable<T>> implements Iterable<T>{
         topnode = null;
     }
     public int getMaxFrequency(){
-        return 5;
+        return maxcount;
     }
 
+    public node<T> getnode(T t){
+        node<T> curNode = topnode;
+        while(true){
+            if(curNode.value == t)
+                return curNode;
+            
+
+            if(t.compareTo(curNode.value) == 1){
+                if(curNode.rightchild != null){
+                    curNode = curNode.rightchild;
+
+                }else{
+                    return null;
+                }
+            }else{
+                if(curNode.leftchild != null){
+                    curNode = curNode.leftchild;
+                }else{
+                    return null;
+                }
+            }
+        }
+    }
+
+    public boolean contains(T t){
+        return getnode(t) != null;
+    }
     
+    public int size(){
+        return size;
+    }
+
+    public int counter(T t){
+        node<T> node = getnode(t);
+        if(node != null){
+            return node.count;
+        }else{
+            return 0;
+        }
+
+    }
 
 
 
@@ -69,7 +112,7 @@ public class TreeSetCounter<T extends Comparable<T>> implements Iterable<T>{
             node<T> currentNode = topnode;
             String curpath = "start";
             int count = 0;
-            boolean isepmty = false;
+            boolean done = false;
             
             //1 = right    0 = left 
             //To get to a node follow a string as such 1000110
@@ -83,12 +126,12 @@ public class TreeSetCounter<T extends Comparable<T>> implements Iterable<T>{
                 if(topnode == null)
                     return false;
 
-                return !isepmty;
+                return !done;
             }
 
             public T next(){
                 if(curpath == "start"){
-                    System.out.print("yay");
+                   
                     curpath = "";
                     if(topnode == null){
                         return null;
@@ -122,8 +165,10 @@ public class TreeSetCounter<T extends Comparable<T>> implements Iterable<T>{
                         } else if(curpath.length() > 0 && curpath.charAt(curpath.length()-1) == '1'){
                             curpath = curpath.substring(0, curpath.length()-1);
                         }else{
-                            if(!curpath.contains("1") && currentNode.leftchild == null)
-                                isepmty = true;
+                            
+
+                            
+
                             
 
                             while(curpath.length() > 0 && curpath.charAt(curpath.length()-1) == '0'){
@@ -132,10 +177,10 @@ public class TreeSetCounter<T extends Comparable<T>> implements Iterable<T>{
 
                             
                             
-                            if(curpath.length() == 0){
+                            /*if(curpath.length() == 0){
                                 
                                 return null;
-                            }
+                            }*/
                             curpath = curpath.substring(0, curpath.length()-1);
     
                         }
@@ -153,9 +198,9 @@ public class TreeSetCounter<T extends Comparable<T>> implements Iterable<T>{
 
 
                 //follow new path
-                if(!isepmty){
+                if(!done){
 
-                    System.out.print(curpath);
+                    
                     currentNode = topnode;
                     
                     for(int i = 0; i < curpath.length(); i++){
@@ -165,6 +210,14 @@ public class TreeSetCounter<T extends Comparable<T>> implements Iterable<T>{
                         else if(curpath.charAt(i) == '0')
                         currentNode = currentNode.leftchild;
                     }
+                    done = true;
+                            for(int i = 0; i < curpath.length(); i++){
+                                if(curpath.charAt(i) == '1')
+                                    done = false;
+                            }
+
+                            if(currentNode.leftchild != null)
+                                done = false;
                     
                     
                     count = currentNode.count - 1;
@@ -179,31 +232,41 @@ public class TreeSetCounter<T extends Comparable<T>> implements Iterable<T>{
 
     public static void main(String[] args) {
         TreeSetCounter<Integer> tree = new TreeSetCounter<>();
-        tree.add(10);
-        tree.add(5);
-        tree.add(15);
+        
+        tree.add(6);
         tree.add(7);
-        tree.add(3);
+        tree.add(8);
+        tree.add(20);
+        tree.add(15);
+        tree.add(13);
         tree.add(1);
         tree.add(4);
-        tree.add(6);
-        tree.add(8);
-        tree.add(12);
         tree.add(18);
-        tree.add(11);
+        tree.add(7);
+        tree.add(13);
+        tree.add(3);
+        tree.add(10);
+        tree.add(12);
         tree.add(13);
         tree.add(17);
-        tree.add(20);
-
-
-        node<Integer> nod = new node<Integer>(6);
+        tree.add(5);
+        tree.add(7);
+        tree.add(7);
+        
+        tree.add(11);
+        
+    
         Iterator<Integer> it = tree.iterator();
 
-        while(true){
+        while(it.hasNext()){
+
             System.out.println("  "+it.next()+"  ");
         }
+
         
-           /* System.out.println("   "+ it.next() + "    ");
+        System.out.println(tree.counter(13));
+
+        /*
             System.out.println("   "+ it.next() + "    ");
             System.out.println("   "+ it.next() + "    ");
             System.out.println("   "+ it.next() + "    ");
@@ -220,8 +283,9 @@ public class TreeSetCounter<T extends Comparable<T>> implements Iterable<T>{
             System.out.println("   "+ it.next() + "    ");
             System.out.println("   "+ it.next() + "    ");
             System.out.println("   "+ it.next() + "    ");
-            System.out.println("   "+ it.next() + "    ");*/
-        
+            System.out.println("   "+ it.next() + "    ");
+            System.out.println("   "+ it.next() + "    ");
+        */       
 
         
         
